@@ -11,8 +11,21 @@ Swagger UI is part of the Swagger project.  The Swagger project allows you to pr
 Swagger UI is a dependency-free collection of HTML, Javascript, and CSS assets that dynamically
 generate beautiful documentation and sandbox from a Swagger-compliant API. Because Swagger UI has no dependencies, you can host it in any server environment, or on your local machine.
 
-## This fork
+## Changes in this fork
 This fork changes the apiKey authentication scheme to a JsonWebToken (JWT) scheme. It adds a username + password field which if authenticated sets the token returned and passes it as "Bearer + token" on each request in headers.
+
+It expects a SecurityScheme like this:
+```
+@SWG\SecurityScheme(
+    securityDefinition="JsonWebToken",
+    type="apiKey",
+    authorizationUrl="http://my.api.io/v1/login",
+    in="header",
+    name="Authorization"
+)
+```
+
+Please note that even though the input field is named `username` its actually passed to the server as `email`. You can easily change this in `AuthView.js`.
 
 ## What's Swagger?
 
