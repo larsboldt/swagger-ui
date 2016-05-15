@@ -62,13 +62,27 @@ SwaggerUi.Views.AuthView = Backbone.View.extend({
             var type = auth.get('type');
 
             if (type === 'apiKey') {
-                keyAuth = new SwaggerClient.ApiKeyAuthorization(
-                    auth.get('name'),
-                    auth.get('value'),
-                    auth.get('in')
-                );
+                var that = this;
+                $.ajax({
+                    type: 'POST',
+                    url: auth.get('authorizationUrl'),
+                    data: {
+                        email: auth.get('username'),
+                        password: auth.get('password')
+                    },
+                    success: function(data) {
+                        auth.set('value', data.token);
+                        keyAuth = new SwaggerClient.ApiKeyAuthorization(
+                            auth.get('name'),
+                            'Bearer ' + auth.get('value'),
+                            auth.get('in')
+                        );
 
-                this.router.api.clientAuthorizations.add(auth.get('title'), keyAuth);
+                        that.router.api.clientAuthorizations.add(auth.get('title'), keyAuth);
+                    },
+                    dataType: 'json',
+                    async: false
+                });
             } else if (type === 'basic') {
                 basicAuth = new SwaggerClient.PasswordAuthorization(auth.get('username'), auth.get('password'));
                 this.router.api.clientAuthorizations.add(auth.get('type'), basicAuth);

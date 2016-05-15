@@ -4,8 +4,11 @@ SwaggerUi.Models.ApiKeyAuthModel = Backbone.Model.extend({
     defaults: {
         'in': '',
         name: '',
-        title: '',
-        value: ''
+        title: 'JsonWebToken',
+        value: '',
+        username: '',
+        password: '',
+        authorizationUrl: ''
     },
 
     initialize: function () {
@@ -13,7 +16,7 @@ SwaggerUi.Models.ApiKeyAuthModel = Backbone.Model.extend({
     },
 
     validate: function () {
-        var valid = !!this.get('value');
+        var valid = !!this.get('password') && !!this.get('username');
 
         this.set('valid', valid);
 

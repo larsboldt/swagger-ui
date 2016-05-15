@@ -3,11 +3,16 @@
 SwaggerUi.Views.ApiKeyAuthView = Backbone.View.extend({ // TODO: append this to global SwaggerUi
 
     events: {
-        'change .input_apiKey_entry': 'apiKeyChange'
+        'change .auth_input': 'inputChange'
     },
 
     selectors: {
-        apikeyInput: '.input_apiKey_entry'
+        usernameInput: '.input_apiKey_username',
+        passwordInput: '.input_apiKey_password'
+    },
+
+    cls: {
+        error: 'error'
     },
 
     template: Handlebars.templates.apikey_auth,
@@ -23,13 +28,16 @@ SwaggerUi.Views.ApiKeyAuthView = Backbone.View.extend({ // TODO: append this to 
         return this;
     },
 
-    apiKeyChange: function (e) {
-        var val = $(e.target).val();
+    inputChange: function (e) {
+        var $el = $(e.target);
+        var val = $el.val();
+        var attr = $el.prop('name');
+
         if (val) {
-            this.$(this.selectors.apikeyInput).removeClass('error');
+            $el.removeClass(this.cls.error);
         }
 
-        this.model.set('value', val);
+        this.model.set(attr, val);
     },
 
     isValid: function () {
@@ -37,8 +45,12 @@ SwaggerUi.Views.ApiKeyAuthView = Backbone.View.extend({ // TODO: append this to 
     },
 
     highlightInvalid: function () {
-        if (!this.isValid()) {
-            this.$(this.selectors.apikeyInput).addClass('error');
+        if (!this.model.get('username')) {
+            this.$(this.selectors.usernameInput).addClass(this.cls.error);
+        }
+
+        if (!this.model.get('password')) {
+            this.$(this.selectors.passwordInput).addClass(this.cls.error);
         }
     }
 
