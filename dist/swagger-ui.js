@@ -19480,7 +19480,6 @@ SwaggerUi.Collections.AuthsCollection = Backbone.Collection.extend({
                 });
             }
 
-            console.log(auth);
             return auth;
         });
     }
